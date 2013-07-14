@@ -8,7 +8,6 @@
   <name>posix-security</name>
   <url>www</url>
   
-  
   <build>
     <plugins>
       <plugin>
@@ -38,8 +37,31 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>build-native</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <property name="native.classpath" refid="maven.compile.classpath" />
+                <echo file="${project.build.directory}/compile-classpath" message="${native.classpath}" />
+                <exec dir="" executable="build.sh" failonerror="true"/>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       
     </plugins>
+  
+
   </build>
+
+
+
 </project>

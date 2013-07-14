@@ -7,7 +7,7 @@ osxBuild(){
     # COPTS="-D_SAFE -std=c99 -fnested-functions "
     #libName=posix_Process.jnilib  // this is for native library loading and not absolute. 
     libName="posix_Process.so"
-    dest="lib/${unamestr}"
+    dest="src/main/resources/${unamestr}"
     mkdir -p $dest
     
     gcc -I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -c src/main/c/posix_Process.c
@@ -20,7 +20,7 @@ linuxBuild(){
  echo "Running Linux build..."
  INCLUDEPATH="${JAVA_HOME}/include"
  libName="posix_Process.so"
- dest="lib/${unamestr}"
+ dest="src/main/resources/${unamestr}"
  mkdir -p $dest
  gcc -I$INCLUDEPATH -c src/main/c/posix_Process.c
  gcc -o $libName} posix_Process.o
