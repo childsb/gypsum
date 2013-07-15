@@ -22,8 +22,8 @@ linuxBuild(){
  libName="posix_Process.so"
  dest="src/main/resources/${unamestr}"
  mkdir -p $dest
- gcc -I$INCLUDEPATH -c src/main/c/posix_Process.c
- gcc -o $libName} posix_Process.o
+ gcc -I$INCLUDEPATH -I$INCLUDEPATH/linux -fPIC -c src/main/c/posix_Process.c
+ gcc -o $libName -shared posix_Process.o
  mv ${libName} ${dest}
  
 }
