@@ -1,6 +1,7 @@
 package posix;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,17 +15,71 @@ import java.util.zip.ZipFile;
 public class LoaderUtil{
 
     
-    
+    public static File getTempFile(String fileName){
+        final File tempFile=new File(System.getProperty("java.io.tmpdir"), fileName);
 
-    public static void copyJarFolder(String folderName){
-        URL me = LoaderUtil.class.getProtectionDomain().getCodeSource().getLocation();
+        //initialize?
+        if(tempFile.exists()){
+            return tempFile;
+        }
+        
+       tempFile.mkdirs();
+       tempFile.delete();
+       tempFile.mkdir();
+       try{
+        tempFile.createNewFile();
+       }catch (IOException e){
+        // TODO Auto-generated catch block
+           e.printStackTrace();
+       }
+        
+       return tempFile;
+    }
+
+    public static void copyFileFromJar(String fileNameInJar, File fileOut){
+        //URL me = LoaderUtil.class.getProtectionDomain().getCodeSource().getLocation();
        
+        OutputStream output=null;
+        InputStream input=null;
+        try{
+            output = new FileOutputStream(fileOut);
+            input = LoaderUtil.class.getResourceAsStream(fileNameInJar);
+            
+            byte[] buffer = new byte[1024];
+            
+            int length;
+            while ((length = input.read(buffer)) > 0){
+                output.write(buffer, 0, length);
+            }
+ 
+            if (input != null)input.close();
+            if (output != null)
+                try{
+                    output.close();
+                }catch (IOException e){
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+ 
+        }catch (FileNotFoundException e){
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }catch (IOException e){
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }finally{
+                try{
+                    if(input!=null) input.close();
+                    if(output!=null) output.close();
+                }catch (IOException e){}
+        }
+        
     
     
     
     }
     
-        private static void copyJarFolder(String jarName, String folderName, String dest) {
+        private static void copyDirectoryJarFolder(String jarName, String folderName, String dest) {
           
           try {
                ZipFile z = new ZipFile(jarName);
